@@ -1,4 +1,5 @@
 #include "Fraction.h"
+
 Fraction::Fraction() {
 	numerator = 1;
 	denominator = 1;
@@ -6,8 +7,16 @@ Fraction::Fraction() {
 }
 
 Fraction::Fraction(long long nIn, long long dIn) {
-	numerator = nIn;
-	denominator = dIn;
+	try {
+		if (dIn == 0) { throw FractionException("Denominator == 0; Divide by Zero error"); }
+		numerator = nIn;
+		denominator = dIn;
+	}
+	catch (FractionException& e) {
+		std::cout << e.ReturnMessage();
+
+		exit(0);
+	}
 	Positive();
 	Simplify();
 }
@@ -37,8 +46,14 @@ void Fraction::SumWith(Fraction* fractIn) {
 	Simplify();
 	Positive();
 }
+void Fraction::SumWith(int valIn) {
+	numerator += (valIn * denominator);
+}
 void Fraction::operator+=(Fraction* fractIn) {
 	SumWith(fractIn);
+}
+void Fraction::operator+=(int valIn) {
+	SumWith(valIn);
 }
 
 void Fraction::DiffWith(Fraction* fractIn) {
@@ -66,8 +81,15 @@ void Fraction::DiffWith(Fraction* fractIn) {
 	Positive();
 	Simplify();
 }
+void Fraction::DiffWith(int valIn) {
+	Fraction tempFract(valIn, 1);
+	DiffWith(&tempFract);
+}
 void Fraction::operator-=(Fraction* fractIn) {
 	DiffWith(fractIn);
+}
+void Fraction::operator-=(int valIn) {
+	DiffWith(valIn);
 }
 
 void Fraction::MultiplyBy(Fraction* fractIn) {
@@ -82,8 +104,15 @@ void Fraction::MultiplyBy(Fraction* fractIn) {
 	Positive();
 	Simplify();
 }
+void Fraction::MultiplyBy(int valIn) {
+	Fraction tempFract(valIn, 1);
+	MultiplyBy(&tempFract);
+}
 void Fraction::operator*=(Fraction* fractIn) {
 	MultiplyBy(fractIn);
+}
+void Fraction::operator*=(int valIn) {
+	MultiplyBy(valIn);
 }
 
 void Fraction::DivideBy(Fraction* fractIn) {
@@ -97,8 +126,15 @@ void Fraction::DivideBy(Fraction* fractIn) {
 	Positive();
 	Simplify();
 }
+void Fraction::DivideBy(int valIn) {
+	Fraction tempFract(valIn, 1);
+	MultiplyBy(&tempFract);
+}
 void Fraction::operator/=(Fraction* fractIn) {
 	DivideBy(fractIn);
+}
+void Fraction::operator/=(int valIn) {
+	DivideBy(valIn);
 }
 
 Fraction Fraction::Sum(Fraction* fractIn, Fraction* fractIn2) {
@@ -128,8 +164,15 @@ Fraction Fraction::Sum(Fraction* fractIn, Fraction* fractIn2) {
 	tempFract->Simplify();
 	return *tempFract;
 }
+Fraction Fraction::Sum(Fraction* fractIn, int valIn) {
+	Fraction tempFract(valIn, 1);
+	return Sum(fractIn, &tempFract);
+}
 Fraction Fraction::operator+(Fraction* fractIn) {
 	return Sum(this, fractIn);
+}
+Fraction Fraction::operator+(int valIn) {
+	return Sum(this, valIn);
 }
 
 Fraction Fraction::Difference(Fraction* fractIn, Fraction* fractIn2) {
@@ -160,6 +203,13 @@ Fraction Fraction::Difference(Fraction* fractIn, Fraction* fractIn2) {
 	tempFract->Simplify();
 	return *tempFract;
 }
+Fraction Fraction::Difference(Fraction* fractIn, int valIn) {
+	Fraction tempFract(valIn, 1);
+	return Difference(fractIn, &tempFract);
+}
+Fraction Fraction::operator-(int valIn) {
+	return Difference(this, valIn);
+}
 Fraction Fraction::operator-(Fraction* fractIn) {
 	return Difference(this, fractIn);
 }
@@ -177,8 +227,15 @@ Fraction Fraction::Multiply(Fraction* fractIn, Fraction* fractIn2) {
 	tempFract.Simplify();
 	return tempFract;
 }
+Fraction Fraction::Multiply(Fraction* fractIn, int valIn) {
+	Fraction tempFract(valIn, 1);
+	return Multiply(fractIn, &tempFract);
+}
 Fraction Fraction::operator*(Fraction* fractIn) {
 	return Multiply(this, fractIn);
+}
+Fraction Fraction::operator*(int valIn) {
+	return Multiply(this, valIn);
 }
 
 Fraction Fraction::Divide(Fraction* fractIn, Fraction* fractIn2) {
@@ -194,8 +251,15 @@ Fraction Fraction::Divide(Fraction* fractIn, Fraction* fractIn2) {
 	tempFract.Simplify();
 	return tempFract;
 }
+Fraction Fraction::Divide(Fraction* fractIn, int valIn) {
+	Fraction tempFract(valIn, 1);
+	return Divide(fractIn, &tempFract);
+}
 Fraction Fraction::operator/(Fraction* fractIn) {
 	return Divide(this, fractIn);
+}
+Fraction Fraction::operator/(int valIn) {
+	return Divide(this, valIn);
 }
 
 bool Fraction::GreaterThan(Fraction* fractIn) {
@@ -214,6 +278,13 @@ bool Fraction::operator>(Fraction* fractIn) {
 	return GreaterThan(fractIn);
 }
 
+bool Fraction::LessThan(Fraction* fractIn) {
+	return fractIn->GreaterThan(this);
+}
+bool Fraction::operator<(Fraction* fractIn) {
+	return this->LessThan(fractIn);
+}
+
 bool Fraction::EqualTo(Fraction* fractIn) {
 	if ((fractIn->positive == true || positive == true) && !(fractIn->positive == true && positive == true)) {
 		return false;
@@ -229,7 +300,36 @@ bool Fraction::operator==(Fraction* fractIn) {
 	return EqualTo(fractIn);
 }
 
+bool Fraction::LessThanOrEqualTo(Fraction* fractIn) {
+	if (this->LessThan(fractIn) || this->EqualTo(fractIn)) {
+		return true;
+	}
+	else { return false; }
+}
+bool Fraction::operator<=(Fraction* fractIn) {
+	return LessThanOrEqualTo(fractIn);
+}
+
+bool Fraction::GreaterThanOrEqualTo(Fraction* fractIn) {
+	if (this->GreaterThan(fractIn) || this->EqualTo(fractIn)) {
+		return true;
+	}
+	else { return false; }
+}
+bool Fraction::operator>=(Fraction* fractIn) {
+	return GreaterThanOrEqualTo(fractIn);
+}
+
+
 bool Fraction::Positive() {
+
+	try {
+		if (denominator == 0) { throw FractionException("Denominator == 0; Divide by Zero error"); }
+	}
+	catch (FractionException& e) {
+		std::cout << e.ReturnMessage();
+		exit(0);
+	}
 	//XOR one half of fraction < 0
 	if ((denominator < 0 || numerator < 0) && !((denominator < 0 && numerator < 0))) {
 		positive = false;
@@ -273,7 +373,7 @@ void Fraction::Simplify() {
 }
 
 double Fraction::ReturnFraction() {
-	return (numerator / denominator);
+	return (double(numerator) / double(denominator));
 }
 
 void Fraction::PrintFraction() {
@@ -282,3 +382,5 @@ void Fraction::PrintFraction() {
 	}
 	std::cout << "(" << numerator << "\\" << denominator << ")";
 }
+
+

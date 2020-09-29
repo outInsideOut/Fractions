@@ -1,2 +1,4 @@
 D:\Dev\CPP\Libraries\Fractions\Debug\Fractions.pdb
 D:\Dev\CPP\Libraries\Fractions\Fractions\Debug\Fractions.pdb
+D:\Dev\GitHub\Fractions\Fractions\Debug\Fractions.pdb
+D:\Dev\GitHub\Fractions\Fractions\Fractions\Debug\Fractions.pdb

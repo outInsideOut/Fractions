@@ -14,7 +14,9 @@ This is a c++ static library for Visual Studio which contains 1 class: Fraction.
 
 Fractions are a pair of <i>long long</i> variables which represent the <i>numerator</i> and <i>denominator</i> of the Fraction object and a boolean variable which represents the positivity of the fraction.
 
-The Fraction class comes with simple arithmetic functions, and overloaded operators as one would expect, this allows: Addition, Subtraction, Multiplication & Division with other Fraction objects.
+The Fraction class comes with simple arithmetic functions, and overloaded operators as one would expect, this allows: Addition, Subtraction, Multiplication & Division with other Fraction objects or integers. If an arithmetic or comparitive operation is performed between a fraction object and an integer then the integer is first converted into a fraction.
+
+This Class also includes a Exception class, currently used to catch denominators equal to 0, to avoid divide by 0 errors, this will cause the program to report the error to the console and exit with code 0;
 
 ## Integration with Visual Studio (VS) C++ projects
 
@@ -313,6 +315,10 @@ As you can see from the following psuedo-code these can also be called using the
 ```
 ## Version Control
 
+### v1.1.0
+Arithmetic and comparitive operations, and operator overloading, with integers included.
+### v1.0.2
+Exception handling and try-catch statements for denominator==0.
 ### v1.0.1 
 Initial commit, arithmetic operations fully tested and operation with other Fraction objects. 
 
